@@ -72,7 +72,12 @@ non-casesensitive and the first may either be a segment of the name or
 segment of the description of the ailment, and the second identifies
 whether the user is providing a name or a description. Both arguments
 must be in quotes. If no arguments are provided to the function, it will
-default to all names of ailments.
+default to all names of ailments. Ailmentfunc returns the queried
+ailments in a data.frame that contains data.frames for the variables
+within. For instance, in the beginning of this vignette, I use
+ailmentfunc to return a data.frame of ailments that have the word
+‘poison’ in their description. From this data.frame, I look at the items
+that can be used to recover from poison.
 
 ``` r
 ailmentfunc <- function(query = "all", type = "name") {
@@ -112,9 +117,7 @@ takes two arguments, the first either segments of the name or
 description of an item and the second telling the function whether the
 user is providing either a name or description. And, itemfunc defaults
 to all names of objects in Monster Hunter World. The itemfunc function
-returns a list of the queried items and their full descriptions in
-separate data.frames, a list of the queried objects with their value,
-and the average value of all queried objects.
+returns full descriptions of the queried items a data.frame.
 
 ``` r
 itemfunc <- function(query = "all", type = "name") {
@@ -170,11 +173,11 @@ column of the ailments data.frame. Names in the ailments data.frame are
 always capitalized.
 
 A second data.frame will also be produced from a query of “potion” from
-the name column of the items data.frame.
+the “name” column of the items data.frame.
 
 ``` r
 # Fetch data for poison ailment
-poison_item_data <- ailmentfunc("poison", "description")
+poison_item_data <- ailmentfunc("pois", "description")
 poison_item_data <- poison_item_data[[5]][[1]]
 # Fetch data for items related to health
 health_item_data <- itemfunc("health", "description")
