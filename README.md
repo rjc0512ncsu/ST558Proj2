@@ -3,7 +3,7 @@ ST 558 Project 2
 Ryan Craft
 2023-10-7
 
-\#Introduction:
+# Introduction:
 
 This document is a vignette to show how to retrieve data from an API. To
 demonstrate, I have constructed functions to retrieve data from the
@@ -20,13 +20,15 @@ ailment. Both arguments must be in quotes, but they are not
 case-sensitive and will accept partial entries. The default for both
 main functions is to retrieve all items or ailments based on the name.
 
-\#Requirements To use the functions for interacting with the Monster
-Hunter World API, I used the following packages: library(tidyverse):tons
-of useful features for data manipulation and visualization
-library(jsonlite): API interaction library(treemapify): allows
-production of tree-maps library(ggfittext): resize the text so it fits
-the treemap tile library(knitr): integrate R code and its output into
-documents, add titles to table()
+# Requirements
+
+To use the functions for interacting with the Monster Hunter World API,
+I used the following packages: library(tidyverse):tons of useful
+features for data manipulation and visualization library(jsonlite): API
+interaction library(treemapify): allows production of tree-maps
+library(ggfittext): resize the text so it fits the treemap tile
+library(knitr): integrate R code and its output into documents, add
+titles to table()
 
 Loading necessary libraries to read data, manipulate data, and plot
 data.
@@ -54,8 +56,10 @@ library(ggfittext)
 library(knitr)
 ```
 
-API Interaction Functions Here is where I define the functions to
-interact with the Monster Hunter World API.
+# API Interaction Functions
+
+Here is where I define the functions to interact with the Monster Hunter
+World API.
 
     ailmentfunc
 
@@ -143,22 +147,27 @@ itemfunc <- function(query = "all", type = "name") {
 }
 ```
 
-\#Exploratory Data Analysis \##Research Questions: Given the dataset
-obtained from the Monster Hunter World API, I am particularly interested
-in understanding:
+# Exploratory Data Analysis
+
+## Research Questions:
+
+Given the dataset obtained from the Monster Hunter World API, I am
+particularly interested in understanding:
 
 Which recovery items are most commonly used to counter various ailments?
 Is there a correlation between the rarity of a recovery item and its
 value? To answer these questions, I’ll employ various data visualization
 and analytical techniques.
 
-\##Data Retrieval: First, we’ll fetch data from the API using the
-defined functions. To demonstrate the versatility of the itemfunc
-function, I will provide only one partial first argument, “pois”, and no
-second argument. In doing so, I am showing that the function has the
-ability to be non-case sensitive, and that the second argument defaults
-to searching the name column of the ailments data.frame. Names in the
-ailments data.frame are always capitalized.
+## Data Retrieval:
+
+First, we’ll fetch data from the API using the defined functions. To
+demonstrate the versatility of the itemfunc function, I will provide
+only one partial first argument, “pois”, and no second argument. In
+doing so, I am showing that the function has the ability to be non-case
+sensitive, and that the second argument defaults to searching the name
+column of the ailments data.frame. Names in the ailments data.frame are
+always capitalized.
 
 A second data.frame will also be produced from a query of “potion” from
 the name column of the items data.frame.
@@ -171,24 +180,26 @@ poison_item_data <- poison_item_data[[5]][[1]]
 health_item_data <- itemfunc("health", "description")
 ```
 
-\##Contingency Tables: To understand which recovery items are commonly
-used, we can create a contingency table. In order to provide the data
-required from these dataframes, I needed to take a look at the data
-produced from the queries and provide the correct index for the desired
-data.frame and the correct column name for the comparison. In this
-table, the names will appear as the rows and the rarity (on a 1-12
-scale) will appear on the top. We will also produce a second table that
-shows the names and values of the items that provide recovery from
-poison with the names of the items as the rows and the values of the
-items as the columns. For a look at how these rarities and values
-compare to items that impact health as a whole, we will also produce two
-tables looking at these variables for all health-related items:
+## Contingency Tables:
+
+To understand which recovery items are commonly used, we can create a
+contingency table. In order to provide the data required from these
+dataframes, I needed to take a look at the data produced from the
+queries and provide the correct index for the desired data.frame and the
+correct column name for the comparison. In this table, the names will
+appear as the rows and the rarity (on a 1-12 scale) will appear on the
+top. We will also produce a second table that shows the names and values
+of the items that provide recovery from poison with the names of the
+items as the rows and the values of the items as the columns. For a look
+at how these rarities and values compare to items that impact health as
+a whole, we will also produce two tables looking at these variables for
+all health-related items:
 
 ``` r
-print("Poison Item Rarity One-Way Table")
+print("Poison Item Rarity Table")
 ```
 
-    ## [1] "Poison Item Rarity One-Way Table"
+    ## [1] "Poison Item Rarity Table"
 
 ``` r
 table(poison_item_data$name, poison_item_data$rarity)
@@ -200,10 +211,10 @@ table(poison_item_data$name, poison_item_data$rarity)
     ##   Herbal Medicine 0 1
 
 ``` r
-print("Poison Item Value One-Way Table")
+print("Poison Item Value Table")
 ```
 
-    ## [1] "Poison Item Value One-Way Table"
+    ## [1] "Poison Item Value Table"
 
 ``` r
 table(poison_item_data$name, poison_item_data$value)
@@ -215,10 +226,10 @@ table(poison_item_data$name, poison_item_data$value)
     ##   Herbal Medicine 0  1
 
 ``` r
-print("Health Item Rarity One-Way Table")
+print("Health Item Rarity Table")
 ```
 
-    ## [1] "Health Item Rarity One-Way Table"
+    ## [1] "Health Item Rarity Table"
 
 ``` r
 table(health_item_data$name, health_item_data$rarity)
@@ -240,10 +251,10 @@ table(health_item_data$name, health_item_data$rarity)
     ##   Sushifish Scale       0 1 0 0 0
 
 ``` r
-print("Health Item Value One-Way Table")
+print("Health Item Value Table")
 ```
 
-    ## [1] "Health Item Value One-Way Table"
+    ## [1] "Health Item Value Table"
 
 ``` r
 table(health_item_data$name, health_item_data$value)
@@ -264,14 +275,16 @@ table(health_item_data$name, health_item_data$value)
     ##   Recover Ammo 2        1 0  0  0  0  0   0   0   0
     ##   Sushifish Scale       0 0  0  0  1  0   0   0   0
 
-Numerical Summaries: Based on the contingency tables produced, it is
-clear that there are many more health-related items than items that cure
-poison, which can be expected. Further, the rarity and value of health
-items exists on a greater scale than poison items. To make this data
-more digestible and put it on a scale that allows the two categories to
-be more directly compared, I will generate numerical summaries of these
-aspects of poison items and health recovery items. Let’s generate some
-summaries of the data:
+## Numerical Summaries:
+
+Based on the contingency tables produced, it is clear that there are
+many more health-related items than items that cure poison, which can be
+expected. Further, the rarity and value of health items exists on a
+greater scale than poison items. To make this data more digestible and
+put it on a scale that allows the two categories to be more directly
+compared, I will generate numerical summaries of these aspects of poison
+items and health recovery items. Let’s generate some summaries of the
+data:
 
 ``` r
 #using the summary() function to produce numerical summaries of the data, allowing for more direct comparison of data that may have varying ranges of values
@@ -332,10 +345,16 @@ average value for a poison-curing object is 15.50. Further, the average
 rarity of a health-related object is 2.5, while the average rarity of a
 poison-curing object is 1.5. This tells us that poison curing objects
 are less valuable than health-related objects on average, and they are
-also less rare than health-related objects on average. This data can be
-visualized using a variety of methods, including boxplots, scatterplots,
-and histograms. Let’s take a look at some of these visualizations to get
-a better idea of the shape of the distribution of our data.
+also less rare than health-related objects on average.
+
+## Plots
+
+This data can be visualized using a variety of methods, including
+boxplots, scatterplots, and histograms. Let’s take a look at some of
+these visualizations to get a better idea of the shape of the
+distribution of our data.
+
+### Barplots
 
 ``` r
 # Poison Recovery Items by Value with green bars
@@ -398,6 +417,8 @@ more valuable? We can look at this through the lens of assessing the
 recovery objects as well as other types of objects as a whole to see if
 the trend carries throughout different categories. One way of doing this
 is to create plots that allow you to directly compare different types.
+
+### Side-by-side 2-way Barplots
 
 ``` r
 attack_item_data <- itemfunc('attack', 'description')
@@ -529,16 +550,18 @@ print(defense_item_2wayplot_rarityVvalue)
 
 ![](RC-ST558-Project-2_files/figure-gfm/side_by_side-3.png)<!-- -->
 
-In these plots, we are able to look at the rarity and value of attack
-items and health items. By doing so, we can observe that the trend that
-I had previously posited, that items that are more rare are also more
-valuable does not necessarily exist across different categories of
+In these plots, we are able to look at the rarity and value of attack,
+defense, and health items. By doing so, we can observe that the trend
+that I had previously posited, that items that are more rare are also
+more valuable does not necessarily exist across different categories of
 items. This trend did appear to exist when looking at the poison
 recovery items and, to some extent, health-related items and defense
 items, but it is not present when looking at attack items. By looking at
 these three graphs that assess rarity and value across different item
 categories, it appears that there is not a consistent trend in item
 value increasing along with rarity.
+
+### Scatterplot
 
 To get an overall look at whether this trend exists, we will make
 another graph that takes a look at all items in Monster Hunter World,
@@ -566,10 +589,12 @@ print(scatterplot_items)
     ## `geom_smooth()` using formula = 'y ~ x'
 
 ![](RC-ST558-Project-2_files/figure-gfm/plot_all_items-1.png)<!-- -->
-Using this method, it does in fact appear that there is a positive trend
-between item value and item rarity. With a little statistics
-elbow-grease, we can determine whether this trend is predictive, or
-merely an artifact.
+Using this method, it does in fact appear that there is some level of a
+positive trend between item value and item rarity. With a little
+statistics elbow-grease, we can determine whether this trend is
+predictive, or merely an artifact.
+
+## Stats
 
 ``` r
 # Fit a linear model
@@ -589,6 +614,8 @@ correlation. With this data combined with our observations of the
 graphs, it is fairly safe to say that our previous conclusion that the
 trend is inconsistent and may only exist in certain item categories is
 well-founded.
+
+## Tree-map
 
 Finally, I will utilize a different type of plotting to see if it
 provides any additional information on this comparison. The type of
@@ -617,12 +644,14 @@ strong correlation between item rarity and we would be able to observe a
 consistent wave in how the color changes going from light to dark.
 However, we can see here that the change in color is much more random.
 
-\#Wrap-Up To summarize the things I did in this vignette, I built
-functions to interact with some of the Monster Hunter World API
-endpoints, retrieved some of the data, and explored it using tables,
-numerical summaries, and data visualization. I found some unsurprising
-things, like that within some categories rarity of items appeared to
-predict the value of items. I also found some surprising things, such as
-how, overall, item rarity was a weak predictor of value.
+# Wrap-Up
+
+To summarize the things I did in this vignette, I built functions to
+interact with some of the Monster Hunter World API endpoints, retrieved
+some of the data, and explored it using tables, numerical summaries, and
+data visualization. I found some unsurprising things, like that within
+some categories rarity of items appeared to predict the value of items.
+I also found some surprising things, such as how, overall, item rarity
+was a weak predictor of value.
 
 I hope my vignette helps you interact with APIs in the future.
